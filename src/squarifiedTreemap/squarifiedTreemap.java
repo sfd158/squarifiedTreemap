@@ -1,8 +1,5 @@
 package squarifiedTreemap;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
 import base.*;
 public class squarifiedTreemap extends treemapBase
 {
@@ -11,23 +8,17 @@ public class squarifiedTreemap extends treemapBase
 		super();
 	}
 	
-	public squarifiedTreemap(final ArrayList<Double> _nodeArea,
+	public squarifiedTreemap(nodeHandler _nodes,
 			final double _width, final double _height, final boolean normalize)
 	{
-		super(_nodeArea, _width, _height, normalize);
-	}
-	
-	@Override
-	protected void afterSetNodeArea()
-	{
-		Collections.sort(nodeArea, Collections.reverseOrder());
+		super(_nodes, _width, _height, normalize);
 	}
 	
 	@Override
 	public void calcTreemap()
 	{
 		rectType blankAndNowLine = new rectType(dx, dy, 0, 0);
-		currentLine nowLine = new currentLine(nodeArea, answerList, blankAndNowLine);
+		currentLine nowLine = new currentLine(nodes, answerList, blankAndNowLine);
 		while(nowLine.nextToken())
 		{
 			if (nowLine.shouldCreateNew())

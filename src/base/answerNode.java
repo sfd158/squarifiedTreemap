@@ -11,21 +11,21 @@ public class answerNode extends rectType
 	public String toJson()
 	{
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("{\ndx: ");
+		buffer.append("{dx: ");
 		buffer.append(dx);
-		buffer.append(",\n");
+		buffer.append(',');
 		
 		buffer.append("dy: ");
 		buffer.append(dy);
-		buffer.append(",\n");
+		buffer.append(',');
 		
 		buffer.append("x: ");
 		buffer.append(leftTopX);
-		buffer.append(",\n");
+		buffer.append(',');
 		
 		buffer.append("y: ");
 		buffer.append(leftTopY);
-		buffer.append("\n}");
+		buffer.append("}");
 		return buffer.toString();
 	}
 }

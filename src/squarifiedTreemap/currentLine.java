@@ -9,13 +9,11 @@ public class currentLine extends currentLineBase
 	protected rectType blankAndNowLine;
 	protected double nowLineArea = 0;
 	
-	
 	//沿着短边来排
 	protected void createNew()
 	{
 		//更新空白+CurrentLine左上角顶点, 长宽
 		rectXY nlr = new rectXY(); //nowLineRec
-		//有个小问题，初始的fixEdge没确定...
 		switch (fixEdge)
 		{
 		case currentLine.fixInX:
@@ -36,16 +34,10 @@ public class currentLine extends currentLineBase
 			System.err.println("currentLine.fixEdge wrong.");
 			break;
 		}
-			
-		//还需要计算fixEdgeLength..
-		//这个还得想想怎么办,, 
-		//createNew是沿着短边, 那么, fixEdge其实指的是nowLine中, fixEdge一直存在的,
-		//把fixEdge拆成了若干块..
-		//在append时, fixEdgelength
 		
 		//新起一行
 		this.firstNode = ++this.lastNode;
-		nowLineArea = nodeArea.get(this.firstNode);
+		nowLineArea = nodes_area[this.firstNode];
 		rectXY rect = new rectXY();
 		if(blankAndNowLine.getDX() < blankAndNowLine.getDY())
 		{
@@ -62,20 +54,18 @@ public class currentLine extends currentLineBase
 	}
 	protected void append()
 	{
-		//把lastNode+1插入
 		alpha0 = alpha1;
-		nowLineArea += nodeArea.get(++lastNode);
+		nowLineArea += nodes_area[++lastNode];
 	}
 	protected boolean nextToken()
 	{
-		if (lastNode + 1 < nodeArea.size())
+		if (lastNode + 1 < nodes_area.length)
 			return true;
 		else
 		{
 			outputNodeCoor();
 			return false;
 		}
-		//return lastNode < nodeArea.size();
 	}
 	
 	protected void outputNodeCoor()
@@ -89,8 +79,7 @@ public class currentLine extends currentLineBase
 		{
 			for(int i=this.firstNode; i<=this.lastNode; i++)
 			{
-				ndy = nodeArea.get(i) / ndx;
-				//在插第二个块的时候, nlty为433, 正确的值应该为0
+				ndy = nodes_area[i] / ndx;
 				answerList.add(new answerNode(ndx, ndy, nltx, nlty));
 				nlty += ndy;
 			}
@@ -99,7 +88,7 @@ public class currentLine extends currentLineBase
 		{
 			for(int i=this.firstNode; i<=this.lastNode; i++)
 			{
-				ndx = nodeArea.get(i) / ndy;
+				ndx = nodes_area[i] / ndy;
 				answerList.add(new answerNode(ndx, ndy, nltx, nlty));
 				nltx += ndx;
 			}
@@ -112,10 +101,10 @@ public class currentLine extends currentLineBase
 		return alpha1 > alpha0;
 		//return false means should insert into current line.
 	}
-	public currentLine(ArrayList<Double> _nodeArea, ArrayList<answerNode> _answerList,
+	public currentLine(nodeHandler _nodes, ArrayList<answerNode> _answerList,
 			rectType _blankAndNowLine)
 	{
-		super(_nodeArea, _answerList);
+		super(_nodes, _answerList);
 		blankAndNowLine = _blankAndNowLine;
 		createNew();
 	}
