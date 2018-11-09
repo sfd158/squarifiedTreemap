@@ -1,7 +1,11 @@
 package squarifiedTreemap;
 
+
+//TODO: squarifiedTreemap输出的时候, 一并把name和id也输出了。。
 import java.util.ArrayList;
 import base.*;
+import base.mode.alphaMode;
+import base.mode.divideMode;
 public class currentLine extends currentLineBase
 {
 	protected int firstNode = -1, lastNode = -1; ////of ArrayList nodeArea
@@ -16,19 +20,24 @@ public class currentLine extends currentLineBase
 		rectXY nlr = new rectXY(); //nowLineRec
 		switch (fixEdge)
 		{
-		case currentLine.fixInX:
+		case currentLine.insertAlongY:
 			nlr.setDX(blankAndNowLine.getDX(), nowLineArea);
+			blankAndNowLine.setToRemain(nlr, divideMode.divideUpDown);
+			//其实insertAlongY和divideUpDown或许可以合并...
+			/*
 			blankAndNowLine.setDY(blankAndNowLine.getDY() - nlr.getDY());
 			blankAndNowLine.setLeftTop(blankAndNowLine.getLeftTopX(), 
-					blankAndNowLine.getLeftTopY() + nlr.getDY());
+					blankAndNowLine.getLeftTopY() + nlr.getDY());*/
 			break;
-		case currentLine.fixInY:
+		case currentLine.insertAlongX:
 			nlr.setDY(blankAndNowLine.getDY(), nowLineArea);
+			blankAndNowLine.setToRemain(nlr, divideMode.divideLeftRight);
+			/*
 			blankAndNowLine.setDX(blankAndNowLine.getDX() - nlr.getDX());
 			blankAndNowLine.setLeftTop(blankAndNowLine.getLeftTopX() + nlr.getDX(), 
-					blankAndNowLine.getLeftTopY());
+					blankAndNowLine.getLeftTopY());*/
 			break;
-		case currentLine.fixInNotSure:
+		case currentLine.insertNotSure:
 			break;
 		default:
 			System.err.println("currentLine.fixEdge wrong.");
@@ -41,12 +50,12 @@ public class currentLine extends currentLineBase
 		rectXY rect = new rectXY();
 		if(blankAndNowLine.getDX() < blankAndNowLine.getDY())
 		{
-			this.set(currentLine.fixInX, blankAndNowLine.getDX());
+			this.set(currentLine.insertAlongY, blankAndNowLine.getDX());
 			rect.setDX(blankAndNowLine.getDX(), nowLineArea);
 		}
 		else
 		{
-			this.set(currentLine.fixInY, blankAndNowLine.getDY());
+			this.set(currentLine.insertAlongX, blankAndNowLine.getDY());
 			rect.setDY(blankAndNowLine.getDY(), nowLineArea);
 		}
 		this.alpha0 = rect.getAlpha();
@@ -75,7 +84,7 @@ public class currentLine extends currentLineBase
 		//new left top X, new left top Y
 		
 		double ndx = blankAndNowLine.getDX(), ndy = blankAndNowLine.getDY(); //new dx, new dy
-		if(this.fixEdge == currentLine.fixInX)//x固定, 沿着y走. dx是不变的
+		if(this.fixEdge == currentLine.insertAlongY)//x固定, 沿着y走. dx是不变的
 		{
 			for(int i=this.firstNode; i<=this.lastNode; i++)
 			{
@@ -97,14 +106,18 @@ public class currentLine extends currentLineBase
 	}
 	protected boolean shouldCreateNew()
 	{
-		alpha1 = calcMaxAlpha(firstNode, lastNode+1);
+		alpha1 = getAlpha(firstNode, lastNode+1, calcAlphaMode);
 		return alpha1 > alpha0;
 		//return false means should insert into current line.
 	}
-	public currentLine(nodeHandler _nodes, ArrayList<answerNode> _answerList,
-			rectType _blankAndNowLine)
+	public currentLine(nodeHandler _nodes, ArrayList<answerNode> _answerList, rectType _blankAndNowLine)
 	{
-		super(_nodes, _answerList);
+		this(_nodes, _answerList, _blankAndNowLine, alphaMode.calcAlphaMaxMode);
+	}
+	
+	public currentLine(nodeHandler _nodes, ArrayList<answerNode> _answerList, rectType _blankAndNowLine, final int _alphaMode)
+	{
+		super(_nodes, _answerList, _alphaMode);
 		blankAndNowLine = _blankAndNowLine;
 		createNew();
 	}

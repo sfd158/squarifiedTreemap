@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import test.countProjectTotLine;
 
 import base.*;
 import binaryTreemap.*;
@@ -56,5 +57,6 @@ public class Main
 		//simpleNodeType node = new simpleNodeType(0, 233, "fuck");
 		//System.out.println(node.toJson());
 		//initList();
+		//countProjectTotLine.read("D:/programming/eclipse-workspace/java/TreeMap/src/");
 	}
 }

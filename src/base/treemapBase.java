@@ -1,11 +1,14 @@
 package base;
 import java.util.ArrayList;
 
-public abstract class treemapBase extends rectXY
+import base.controlAlpha.alphaBase;
+
+public abstract class treemapBase extends alphaBase
 {
-	protected nodeHandler nodes; 
+	protected nodeHandler nodes;
 	protected ArrayList<answerNode> answerList = new ArrayList<>();
-	protected static final double eps = 1e-6;
+	protected rectXY screen = new rectXY();
+	//protected static final double eps = 1e-6;
 	public treemapBase()
 	{
 		
@@ -14,6 +17,13 @@ public abstract class treemapBase extends rectXY
 	public treemapBase(nodeHandler _nodes,
 			final double _width, final double _height, final boolean normalize)
 	{
+		setNodeArea(_nodes,_width,_height,normalize);
+	}
+	
+	public treemapBase(nodeHandler _nodes,
+			final double _width, final double _height, final boolean normalize, final int _calcAlphaMode)
+	{
+		this.setAlphaMode(_calcAlphaMode);
 		setNodeArea(_nodes,_width,_height,normalize);
 	}
 	
@@ -31,7 +41,7 @@ public abstract class treemapBase extends rectXY
 			final double _width, final double _height, final boolean normalize)
 	{
 		nodes = _nodes;
-		this.set(_width, _height);
+		screen.set(_width, _height);
 		nodes.make();
 		if(normalize)
 		{
@@ -39,7 +49,7 @@ public abstract class treemapBase extends rectXY
 		}
 		else
 		{
-			if(Math.abs(nodes.getTotalArea()-_width*_height)>eps)
+			if(judgeEqu.notEqual(nodes.getTotalArea(), _width*_height))
 			{
 				System.err.println("nodes doesn't match screen with _width * _height");
 				return;

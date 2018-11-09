@@ -70,4 +70,8 @@ public class rectXY
 	{
 		return (dx<dy)?(dy/dx):(dx/dy);
 	}
+	public double getArea()
+	{
+		return area;
+	}
 }
